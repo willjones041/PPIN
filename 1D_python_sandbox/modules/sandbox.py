@@ -17,4 +17,4 @@ while t < runtime:
     
     t = t+delt
 
- 
+plot_arrays_vs_t(t=t_array,nr_array=nr_array,qr_array=qr_array,D=D_array,z_array=z_array)

@@ -27,7 +27,7 @@ def atmos_profile(noded_field):
         # I got this profile from the bomex setup case
         # Use lapse rate of 6.5 degrees per kilometre
         #Giving it a pressure and stuff as well
-        temp_node = T0 - z*Lapse
+        temp_node = T0 -Lapse*z 
         p_node = P0*math.e**(-z/PSH)
         ws_node = 3.8/(p_node*math.e**(-17.2693882*(temp_node-273.15)/(temp_node-35.86))-6.109)
         qv_node = RH*ws_node

@@ -23,6 +23,10 @@ def evaporation(parcel,noded_values):
     
     
     qr_dot = (((noded_values['qv_p']/noded_values['ws_p'])-1)/(noded_values['ro_air_p']*ABliq))*vent_r
-
-    nr_dot = qr_dot*(parcel['Nr']/parcel['qr'])
+    
+    nr_dot = 0#qr_dot*(parcel['Nr']/parcel['qr'])
+    if homog == True:
+       nr_dot = qr_dot*(parcel['Nr']/parcel['qr']) 
+    elif homog == False:
+        nr_dot = 0   
     return qr_dot,nr_dot

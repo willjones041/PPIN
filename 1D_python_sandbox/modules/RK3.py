@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from vel_func import *
 from grid2par import *
 from evaporation import *
+from mememe import *
+
 def RK3_step(parcel,t,xdot,qr_dot,nr_dot,delt):
     ca =  np.array([0,-567301805773/1357537059087,-2404267990393/2016746695238,\
                     -3550918686646/2091501179385,-1275806237668/842570457699])
@@ -42,12 +44,18 @@ def RK3_step(parcel,t,xdot,qr_dot,nr_dot,delt):
 def move_parcels(parcel_array,t,delt,noded_field):
     for parcel in parcel_array:
         noded_values = grid2par(parcel,noded_field)
-        if parcel['parcel_no']==1:
-            print(parcel)
         xdot = vel_func(parcel,noded_values['ro_air_p'])
         qr_dot,nr_dot = evaporation(parcel,noded_values)
         RK3_step(parcel,t=t,xdot=xdot,qr_dot=qr_dot,nr_dot=nr_dot,delt=delt)
         #Calculate average rain mass and then calculate average rain diameter
         parcel['D']=((parcel['qr']/parcel['Nr'])/c)**(1/d)
+        if parcel['parcel_no']==1:
+            nr_array.append(parcel['Nr'])
+            qr_array.append(parcel['qr'])
+            D_array.append(parcel['D'])
+            t_array.append(t)
+            z_array.append(parcel['z_pos'])
+        if parcel['z_pos']<0:
+            break
     return parcel_array
 

@@ -4,10 +4,10 @@
 #
 a1 = 4854
 b1 = 1
-a2 =0#-446
-b2 = 0#0.782
+a2 =-446
+b2 = 0.782
 g1 = 195
-g2 = 0#4085.35
+g2 = 4085.35
 f = 0.5
 ro0 = 1.2256
 ro_r = 1000
@@ -22,8 +22,9 @@ domain_height = 3200
 domain_floor = 0
 T0 = 298
 P0 = 10**5
-RH = 0.98
+RH = 0.7
 Rd = 287.05
+homog = False
 #Assuming T is constant at 24.85 degrees C
 #Latent heat of vapourisation
 Lv = 2.442*10**6
@@ -31,7 +32,7 @@ Lv = 2.442*10**6
 Ka = 0.02623
 #gas constant for water vapour
 Rv = 461.52
-Lapse = 0.0065
+Lapse = 0.00065
 node_gap = abs(domain_height - domain_floor)/n_nodes
 PSH = 8619
 #mass to diameter constants from CASIM
@@ -40,6 +41,6 @@ d = 3
 #Initialise time
 t = 0
 # How long to run for
-runtime = 3600
+runtime = 500
 # Fixed timestep (for now)
 delt = 0.05
