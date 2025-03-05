@@ -14,7 +14,7 @@ def create_parcel_array(num_parcels):
             'dNr': 1,
             'qr' : 0.005,
             'dqr': 1,
-            'z_pos': np.random.normal(1000,2),
+            'z_pos': np.random.normal(50,10),
             'dz':1,
             'D':0.0001
         }

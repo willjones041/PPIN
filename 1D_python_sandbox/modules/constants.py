@@ -16,20 +16,21 @@ visc = 1.14*10**-5
 diffus = 2.42*10**-5
 Sc = visc/diffus
 shape = 2.5
-n_nodes = 10
+n_nodes = 1000
 num_parcels = 100
 domain_height = 3200
 domain_floor = 0
-T0 = 298
+theta0 = 300
 P0 = 10**5
 RH = 0.7
 Rd = 287.05
-homog = False
+homog = True
 #Assuming T is constant at 24.85 degrees C
 #Latent heat of vapourisation
 Lv = 2.442*10**6
 #Thermal conductivity of air
 Ka = 0.02623
+cp = 1005.7
 #gas constant for water vapour
 Rv = 461.52
 Lapse = 0.00065
@@ -41,6 +42,6 @@ d = 3
 #Initialise time
 t = 0
 # How long to run for
-runtime = 500
+runtime = 1000
 # Fixed timestep (for now)
 delt = 0.05

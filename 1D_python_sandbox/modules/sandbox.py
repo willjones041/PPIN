@@ -11,10 +11,11 @@ parcel_array = create_parcel_array(num_parcels)
 #Initialise the noded field
 noded_field = atmos_profile(create_noded_field(n_nodes))
 #Here is the runtime script
-print(noded_field['ro_node'])
+
 while t < runtime:
     move_parcels(parcel_array,t,delt,noded_field=noded_field)
     
     t = t+delt
 
-plot_arrays_vs_t(t=t_array,nr_array=nr_array,qr_array=qr_array,D=D_array,z_array=z_array)
+#plot_arrays_vs_t(t=t_array,nr_array=nr_array,qr_array=qr_array,z_array=z_array)
+#plot_z_pos(noded_field)
