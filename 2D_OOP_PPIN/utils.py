@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
-
+from parcels.parcels import *
+from parcels.precip_parcels import *    
+from constants import *
+from fields.domain import Domain
 def display_nodes(nodes):
     """Prints the generated nodes in a readable format."""
     for node in nodes:
@@ -16,3 +19,11 @@ def plot_nodes(nodes):
     plt.title("Grid Nodes Visualization")
     plt.grid(True)
     plt.show()
+
+def impinge_check():
+    for parcel in PrecipParcel.get_all():
+        if parcel.y <=0:
+            rainfall += 522*D**(3)
+            parcel.clear_parcel()
+    return rainfall
+
