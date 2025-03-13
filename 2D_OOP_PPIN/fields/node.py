@@ -2,13 +2,20 @@
 # information on the state and behaviour of a node object
 
 class Node:
-    def __init__(self,x,y,temp,qv,ro,ws):
+    instances = []
+
+    def __init__(self, x, y, temp, qv, ro, ws):
         self.x = x
         self.y = y
         self.temp = temp
         self.qv = qv
         self.ro = ro
         self.ws = ws
+        Node.instances.append(self)
+
     def __repr__(self):
-        return f"Node({self.x}, {self.y})"
-    
+        return f"Node({self.x}, {self.y},{self.temp},{self.qv},{self.ro},{self.ws})"
+
+    @classmethod
+    def get_all_instances(cls):
+        return cls.instances

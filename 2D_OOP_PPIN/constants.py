@@ -1,12 +1,15 @@
 import numpy as np
 
 # Simulated user input
-x_extent = 100#float(input("Enter X extent of domain: "))
-y_extent = 100#float(input("Enter Y extent of domain: "))
+x_extent = 10#float(input("Enter X extent of domain: "))
+y_extent = 10#float(input("Enter Y extent of domain: "))
 origin_x = 0#float(input("Enter X coordinate of origin: "))
 origin_y = 0#float(input("Enter Y coordinate of origin: "))
 num_x = 11#int(input("Enter number of nodes along X: "))
 num_y = 11#int(input("Enter number of nodes along Y: "))
+gridbox_x = x_extent/(num_x-1)
+gridbox_y = y_extent/(num_y-1)
+
 num_parcels = 100#int(input("Enter parcel number: "))
 qr0 = 0.0001#float(input("Enter initial mass mixing ratio:"))
 nr0 = 100000##float(input("Enter initial number concentration:"))
@@ -56,4 +59,7 @@ homog = True
 runtime = 100
 delt = 0.05
 
+#parcel initialisations
+init_y_parcels = (2/3)*y_extent
+std_dev_y_parcels = 0.1*y_extent
 
