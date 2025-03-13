@@ -1,12 +1,12 @@
 import numpy as np
 
 # Simulated user input
-x_extent = 10#float(input("Enter X extent of domain: "))
-y_extent = 10#float(input("Enter Y extent of domain: "))
+x_extent = 6280#float(input("Enter X extent of domain: "))
+y_extent = 6280#float(input("Enter Y extent of domain: "))
 origin_x = 0#float(input("Enter X coordinate of origin: "))
 origin_y = 0#float(input("Enter Y coordinate of origin: "))
-num_x = 11#int(input("Enter number of nodes along X: "))
-num_y = 11#int(input("Enter number of nodes along Y: "))
+num_x = 32#int(input("Enter number of nodes along X: "))
+num_y = 32#int(input("Enter number of nodes along Y: "))
 gridbox_x = x_extent/(num_x-1)
 gridbox_y = y_extent/(num_y-1)
 
@@ -33,7 +33,7 @@ cb = np.array([1432997174477/9575080441755,5161836677717/13612068292357,\
 cc = np.array([0,1432997174477/9575080441755,2526269341429/6820363962896,\
                    2006345519317/3224310063776,2802321613138/2924317926251])
 #rainfall rate initial value
-rainfall = 0
+
 
 #Size distribution constants
 shape = 2.5
@@ -56,10 +56,10 @@ ro0 = 1.2256
 homog = True
 
 #time constants
-runtime = 100
+runtime = 3600
 delt = 0.05
 
 #parcel initialisations
 init_y_parcels = (2/3)*y_extent
-std_dev_y_parcels = 0.1*y_extent
+std_dev_y_parcels = 0.01*y_extent
 

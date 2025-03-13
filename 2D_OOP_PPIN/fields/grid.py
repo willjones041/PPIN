@@ -46,10 +46,10 @@ class Grid:
                 closest_nodes.append(node)
         
         # Sort the closest nodes based on their distance to the parcel
-        closest_nodes.sort(key=lambda node: ((node.x - x) ** 2 + (node.y - y) ** 2))
+        closest_nodes.sort(key=lambda node: (node.x, node.y))
         
         # Extract the temperature, qv, ro, and ws values from the closest nodes
-
+        
         BL = closest_nodes[0]
         TL = closest_nodes[1]
         BR = closest_nodes[2]
@@ -58,8 +58,8 @@ class Grid:
         x2 = BR.x
         y1 = BL.y
         y2 = TL.y
-        print(f'BL = {BL}, BR = {BR}, TL = {TL}, TR = {TR}')
-        print(f'x1 = {x1}, x2 = {x2}, y1 = {y1}, y2 = {y2}')
+        # print(f'BL = {BL}, BR = {BR}, TL = {TL}, TR = {TR}')
+        # print(f'x1 = {x1}, x2 = {x2}, y1 = {y1}, y2 = {y2}')
         temp = ((((x2-x)*(y2-y))/((x2-x1)*(y2-y1)))*BL.temp 
             + (((x-x1)*(y2-y))/((x2-x1)*(y2-y1)))*BR.temp 
             + (((x2-x)*(y-y1))/((x2-x1)*(y2-y1)))*TL.temp 

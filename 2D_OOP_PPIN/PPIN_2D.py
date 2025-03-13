@@ -4,6 +4,12 @@ from parcels.parcels import *
 from parcels.precip_parcels import *
 from fields.grid import Grid
 from fields.node import Node
+import time
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
+
 def main():
     
     
@@ -16,20 +22,31 @@ def main():
    #create parcels
     domain.create_parcels()
 
-    
+   
 
-    # #PLOT PARCELS
-    plot_nodes_and_parcels(Node.get_all_instances(),PrecipParcel.get_all())
-    print(grid.grid2par(0.5,0.5))
-
-    # #Run Loop
-    # t=0
-    # t_plot = 0
-    # while t < runtime:
-    #     for parcel in PrecipParcel.get_all():
-
-    #         parcel.move(grid=grid,t=t,delt=delt)
-    #     t=t+delt
+    #Run Loop
+    t=0
+    rainfall = 0
+    while t < runtime and len(PrecipParcel.instances) > 0:
+        
+        for parcel in PrecipParcel.instances:
+            #This is the remover function
+            if parcel.y < 0:
+                parcel.clear_parcel()
+                rainfall += 522*D**(3)
+                continue
+            parcel.move(grid=grid,t=t,delt=delt)
+        t=t+delt
+        print(t)
+        print(rainfall)
+    plot_nodes_and_parcels(Node.instances,PrecipParcel.instances)
+        
+        
+        
+        
+       
+        
+        
     
 
 
