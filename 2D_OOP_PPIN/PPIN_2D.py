@@ -27,8 +27,11 @@ def main():
     #Run Loop
     t=0
     rainfall = 0
-    artists = []
-    fig, ax = plt.subplots()
+    
+
+    #prime figure for animation
+    fig, ax, artists= set_pos_figure()
+
     while t < runtime and len(PrecipParcel.instances) > 0:
         
         for parcel in PrecipParcel.instances:
@@ -40,18 +43,16 @@ def main():
             elif parcel.nr < 1:
                 parcel.clear_parcel()
                 continue
+            #this is the fucntion that does periodic boundary conditions
             parcel.x_teleport()
+            #this is the function that moves the parcels and updates attributes
             parcel.move(grid=grid,t=t,delt=delt)
-            if parcel.id == 0:
-                pass#print(f'parcel x = {parcel.x}, parcel y = {parcel.y}')  
+        
         t=t+delt
-        print(f'time = {t}')
-        xdata = [parcel.x for parcel in PrecipParcel.instances]
-        ydata = [parcel.y for parcel in PrecipParcel.instances]
-        container = plt.scatter(xdata, ydata, color='blue')
+        container = fill_container(ax, PrecipParcel.instances)
         artists.append(container)
-    print(len(artists))
-    ani = animation.ArtistAnimation(fig=fig, artists=artists, interval=1000)
+    
+    ani = animation.ArtistAnimation(fig=fig, artists=artists, interval=10)
     plt.show()
         
             

@@ -56,7 +56,7 @@ class PrecipParcel(Parcel):
     def RK4(self,delt,t,xdot,ydot,nr_dot,qr_dot):
         """Calculates the new position of the parcel using the Runge-Kutta method."""
         
-        for j in range(5):
+        for j in range(4):
         
             if j ==0:
                 #x position
@@ -97,7 +97,8 @@ class PrecipParcel(Parcel):
         temp, qv, ro ,ws = grid.grid2par(x=self.x,y=self.y)
         #First calculate the velocity of the parcel
         y_dot = -self.term_func(ro)
-        x_dot = 5
+        x_dot = 0
+        
         #Evaporation step 
         qr_dot,nr_dot = self.evaporation(temp,qv,ro,ws)
         #Now perfrom the Runge-Kutta method to update parcel attributes

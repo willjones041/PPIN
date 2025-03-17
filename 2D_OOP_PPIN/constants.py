@@ -1,8 +1,8 @@
 import numpy as np
 
 # Simulated user input
-x_extent = 6280#float(input("Enter X extent of domain: "))
-y_extent = 6280#float(input("Enter Y extent of domain: "))
+x_extent = 100#float(input("Enter X extent of domain: "))
+y_extent = 100#float(input("Enter Y extent of domain: "))
 origin_x = 0#float(input("Enter X coordinate of origin: "))
 origin_y = 0#float(input("Enter Y coordinate of origin: "))
 num_x = 32#int(input("Enter number of nodes along X: "))
@@ -10,7 +10,7 @@ num_y = 32#int(input("Enter number of nodes along Y: "))
 gridbox_x = x_extent/(num_x-1)
 gridbox_y = y_extent/(num_y-1)
 
-num_parcels = 10#int(input("Enter parcel number: "))
+num_parcels = 100#int(input("Enter parcel number: "))
 qr0 = 0.001#float(input("Enter initial mass mixing ratio:"))
 nr0 = 100000##float(input("Enter initial number concentration:"))
 rainfall = 0
@@ -23,7 +23,7 @@ b2 = 0.782
 g1 = 195
 g2 = -4085.35
 f = 0.5
-D=0.001
+D=0.0001
 #Runge kutta coefficients
 ca =  np.array([0,-567301805773/1357537059087,-2404267990393/2016746695238,\
                     -3550918686646/2091501179385,-1275806237668/842570457699])
@@ -53,15 +53,15 @@ cp = 1005.7
 #gas constant for water vapour
 Rv = 461.52
 ro0 = 1.2256
-homog = False
+homog = True
 
 #time constants
-runtime = 50
+runtime = 3600
 delt = 0.05
 
 #parcel initialisations
 init_y_parcels = (2/3)*y_extent
-std_dev_y_parcels = 0.001*y_extent
+std_dev_y_parcels = 0.1*y_extent
 
 #environmental constants
 #isotropic
@@ -70,4 +70,4 @@ lapse_rate = 9.5e-3
 p0 = 100000
 Rd = 287
 g = 9.81
-RHenv = 0.7
+RHenv = 0.99

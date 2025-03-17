@@ -78,4 +78,20 @@ def animate_parcel_histories(parcel_histories):
     # Show the animation
     plt.show()
    
-    
+def fill_container(ax, parcels):
+    xdata = [parcel.x for parcel in parcels]
+    ydata = [parcel.y for parcel in parcels]
+    areadata = [parcel.qr*10000 for parcel in parcels]
+    container = [ax.scatter(xdata, ydata,areadata, color='blue')]
+    return container
+
+def set_pos_figure():
+    fig, ax = plt.subplots()
+    ax.set_xlim(0, x_extent)
+    ax.set_ylim(0, y_extent)
+    ax.set_xlabel("X Coordinate")
+    ax.set_ylabel("Y Coordinate")   
+    ax.set_title("Parcels Position Visualization")
+    ax.grid(True)
+    artists = []
+    return fig, ax, artists
