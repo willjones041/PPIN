@@ -5,7 +5,7 @@ from constants import *
 from fields.domain import Domain
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.animation as animatio
+import matplotlib.animation as animation
 def display_nodes(nodes):
     """Prints the generated nodes in a readable format."""
     for node in nodes:
@@ -34,7 +34,7 @@ def display_parcels(parcels):
     plt.grid(True)
     plt.show()
 
-def plot_nodes_and_parcels(nodes, parcels):
+def plot_nodes_and_parcels(nodes, parcels,time):
     """Visualizes the nodes and parcels on the same plot."""
     node_x_values = [node.x for node in nodes]
     node_y_values = [node.y for node in nodes]
@@ -46,11 +46,36 @@ def plot_nodes_and_parcels(nodes, parcels):
     ax.scatter(parcel_x_values, parcel_y_values, marker="o", color="red", label="Parcels")
     plt.xlabel("X Coordinate")
     plt.ylabel("Y Coordinate")
-    plt.title("Nodes and Parcels Visualization")
+    plt.title(f"Nodes and Parcels Visualization at {time} seconds")
     plt.grid(True)
     plt.legend()
     plt.show()
-    plt.pause(0.01)
-    plt.close(fig=fig)
+    plt.close(fig)
         
     return fig
+
+def animate_parcel_histories(parcel_histories):
+    # Create a figure and axis
+    fig, ax = plt.subplots()
+
+    # Set the limits of the plot
+    ax.set_xlim(0, x_extent)
+    ax.set_ylim(0, y_extent)
+
+    # Create an empty plot
+    scatter = ax.scatter([], [])
+
+    # Function to update the plot for each frame
+    def update(frame):
+        x_values = [history[frame][0] for history in parcel_histories]
+        y_values = [history[frame][1] for history in parcel_histories]
+        scatter.set_offsets(np.column_stack((x_values, y_values)))
+        return scatter,
+
+    # Create the animation
+    ani = animation.FuncAnimation(fig, update, frames=len(parcel_histories[0]), interval=1000, blit=True)
+
+    # Show the animation
+    plt.show()
+   
+    

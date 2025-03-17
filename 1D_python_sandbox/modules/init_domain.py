@@ -31,6 +31,7 @@ def atmos_profile(noded_field):
         exn = (p_node/P0)**(Rd/cp)
         temp_node = theta0*exn 
         p_node = P0*math.e**(-z/PSH)
+        #This is the saturation mixing ratio using the method of Bolton 1980
         ws_node = 3.8/(p_node*math.e**(-17.2693882*(temp_node-273.15)/(temp_node-35.86))-6.109)
         qv_node = RH*ws_node
         Tv_node = temp_node*(1+ 0.61*qv_node)

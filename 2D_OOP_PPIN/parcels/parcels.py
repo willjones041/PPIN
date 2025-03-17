@@ -3,7 +3,8 @@ import math
 class Parcel:
     instances = []  # Class-level storage for all parcels
 
-    def __init__(self, x, y):
+    def __init__(self, x, y,id):
+        self.id = id
         self.x = x
         self.y = y
         self.dx = None

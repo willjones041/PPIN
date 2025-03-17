@@ -2,6 +2,7 @@
 from fields.node import Node
 import numpy as np
 from constants import *
+import math
 class Grid:
     def __init__(self,domain, num_x, num_y):
         self.domain = domain #Tying the grid to the domain
@@ -19,20 +20,12 @@ class Grid:
             for j in range(self.num_y):
                 x = self.domain.origin[0] + i * x_spacing
                 y = self.domain.origin[1] + j * y_spacing
-                if x == 1:
-                    temp = 1
-                elif x == 0:
-                    temp = 0
-                else: temp = 100
-                # if y <=100:
-                #     temp = 300
-                # elif y > 100 and y <= 200:
-                #     temp = 250
-                # else:
-                #     temp = 200
-                qv = 0.01
-                ro = 1.225
-                ws = 0.0001
+                temp = theta0 - (lapse_rate * y)
+                p = p0*(temp/theta0)**(g/(lapse_rate*Rd))
+                ws = 3.8/(p*math.e**(-17.2693882*(temp-273.15)/(temp-35.86))-6.109)
+                qv = RHenv*ws
+                ro = p/(Rd*temp)
+                
                 Node(x, y, temp, qv, ro, ws)
   
     

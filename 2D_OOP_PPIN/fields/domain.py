@@ -21,6 +21,7 @@ class Domain:
             y = random.gauss(init_y_parcels, std_dev_y_parcels) 
             qr = qr0
             nr = nr0
-            PrecipParcel(x,y,qr=qr,nr=nr)
+            id = i
+            PrecipParcel(x=x,y=y,qr=qr,nr=nr,id=id)
 
     

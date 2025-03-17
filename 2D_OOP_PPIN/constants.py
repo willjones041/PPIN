@@ -10,8 +10,8 @@ num_y = 32#int(input("Enter number of nodes along Y: "))
 gridbox_x = x_extent/(num_x-1)
 gridbox_y = y_extent/(num_y-1)
 
-num_parcels = 100#int(input("Enter parcel number: "))
-qr0 = 0.0001#float(input("Enter initial mass mixing ratio:"))
+num_parcels = 10#int(input("Enter parcel number: "))
+qr0 = 0.001#float(input("Enter initial mass mixing ratio:"))
 nr0 = 100000##float(input("Enter initial number concentration:"))
 rainfall = 0
 ro_air_p = 1.225
@@ -21,7 +21,7 @@ b1 = 1
 a2 =-446
 b2 = 0.782
 g1 = 195
-g2 = 4085.35
+g2 = -4085.35
 f = 0.5
 D=0.001
 #Runge kutta coefficients
@@ -53,13 +53,21 @@ cp = 1005.7
 #gas constant for water vapour
 Rv = 461.52
 ro0 = 1.2256
-homog = True
+homog = False
 
 #time constants
-runtime = 3600
+runtime = 50
 delt = 0.05
 
 #parcel initialisations
 init_y_parcels = (2/3)*y_extent
-std_dev_y_parcels = 0.01*y_extent
+std_dev_y_parcels = 0.001*y_extent
 
+#environmental constants
+#isotropic
+theta0 = 300
+lapse_rate = 9.5e-3
+p0 = 100000
+Rd = 287
+g = 9.81
+RHenv = 0.7
