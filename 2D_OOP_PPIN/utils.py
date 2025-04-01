@@ -6,21 +6,30 @@ from fields.domain import Domain
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+
 def display_nodes(nodes):
     """Prints the generated nodes in a readable format."""
     for node in nodes:
         print(node)
 
 def plot_nodes(nodes):
-    """Visualizes the nodes in a scatter plot."""
-    x_values = [node.x for node in nodes]
-    y_values = [node.y for node in nodes]
+    """Visualizes the nodes in a scatter plot with node.temp and node.ro on twin x axes."""
+    x_values = [node.y for node in nodes]
+    temp_values = [node.temp for node in nodes]
+    ro_values = [node.ro for node in nodes]
+    
 
-    plt.scatter(x_values, y_values, marker="x", color="blue")
-    plt.xlabel("X Coordinate")
-    plt.ylabel("Y Coordinate")
-    plt.title("Grid Nodes Visualization")
-    plt.grid(True)
+    fig, ax1 = plt.subplots()
+    ax1.scatter(x_values, temp_values, marker="x", color="blue")
+    ax1.set_xlabel("Y Coordinate")
+    ax1.set_ylabel("Temperature")
+    ax1.set_title("Grid Nodes Visualization")
+    ax1.grid(True)
+
+    ax2 = ax1.twinx()
+    ax2.scatter(x_values, ro_values, marker="o", color="red")
+    ax2.set_ylabel("Density")
+
     plt.show()
 
 def display_parcels(parcels):
@@ -54,34 +63,11 @@ def plot_nodes_and_parcels(nodes, parcels,time):
         
     return fig
 
-def animate_parcel_histories(parcel_histories):
-    # Create a figure and axis
-    fig, ax = plt.subplots()
-
-    # Set the limits of the plot
-    ax.set_xlim(0, x_extent)
-    ax.set_ylim(0, y_extent)
-
-    # Create an empty plot
-    scatter = ax.scatter([], [])
-
-    # Function to update the plot for each frame
-    def update(frame):
-        x_values = [history[frame][0] for history in parcel_histories]
-        y_values = [history[frame][1] for history in parcel_histories]
-        scatter.set_offsets(np.column_stack((x_values, y_values)))
-        return scatter,
-
-    # Create the animation
-    ani = animation.FuncAnimation(fig, update, frames=len(parcel_histories[0]), interval=1000, blit=True)
-
-    # Show the animation
-    plt.show()
    
 def fill_container(ax, parcels):
     xdata = [parcel.x for parcel in parcels]
     ydata = [parcel.y for parcel in parcels]
-    areadata = [parcel.qr*10000 for parcel in parcels]
+    areadata = [1/parcel.nr*10000 for parcel in parcels]
     container = [ax.scatter(xdata, ydata,areadata, color='blue')]
     return container
 
@@ -95,3 +81,18 @@ def set_pos_figure():
     ax.grid(True)
     artists = []
     return fig, ax, artists
+
+    
+def plot_variables_with_height(x1_values,x2_values, height):
+    fig, ax1 = plt.subplots()
+    ax1.scatter(height, x1_values, marker="x", color="blue")
+    ax1.set_xlabel("Depth m")
+    ax1.set_ylabel("First Variable")
+    ax1.set_title("Variables Visualization")
+    ax1.grid(True)
+    ax2 = ax1.twinx()
+    ax2.plot(height, x2_values, color="red")
+    ax2.set_ylabel("Second variable")
+   
+    plt.show()
+    

@@ -1,13 +1,10 @@
 from fields.domain import Domain
-from utils import *
-from parcels.parcels import *
-from parcels.precip_parcels import *
-from fields.grid import Grid
-from fields.node import Node
-import time
-import numpy as np
+from utils import set_pos_figure, fill_container,plot_variables_with_height
+from parcels.parcels import Parcel
+from parcels.precip_parcels import PrecipParcel
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from constants import x_extent, y_extent, origin_x, origin_y, num_x, num_y, num_parcels, runtime, delt,ro0
 
 ##Next job is to create realistic atmospheric profile
 def main():
@@ -21,9 +18,7 @@ def main():
    
    #create parcels
     domain.create_parcels()
-
     
-
     #Run Loop
     t=0
     rainfall = 0
@@ -35,37 +30,40 @@ def main():
     while t < runtime and len(PrecipParcel.instances) > 0:
         
         for parcel in PrecipParcel.instances:
-            #This is the remover function
+
+            #These 7 lines check if the parcel is outside the domain and if so, removes it
             if parcel.y < 0:
+                rainfall+=parcel.impinge(ro0)
+                rainfall_rate = rainfall/t
+                print(f'Ping! Rainfall rate = {rainfall_rate} ')
+                print(f'Parcel y position = {parcel.y}m ')
                 parcel.clear_parcel()
-                rainfall += 522*D**(3)
                 continue
-            elif parcel.nr < 1:
+                
+            #These 3 lines clear a parcel if its number concentration is less than 1
+            elif parcel.qr < 0:
                 parcel.clear_parcel()
+                print(f'Poof! Raindrop evaporated at height {parcel.y}m ')
                 continue
-            #this is the fucntion that does periodic boundary conditions
+                
+            #this is the function that enforces periodic boundary conditions
             parcel.x_teleport()
+
             #this is the function that moves the parcels and updates attributes
             parcel.move(grid=grid,t=t,delt=delt)
-        
+        #Timer
         t=t+delt
+        print(t)
+        #This is the function that updates the plot
         container = fill_container(ax, PrecipParcel.instances)
         artists.append(container)
-    
+
+    #This is the animation method
     ani = animation.ArtistAnimation(fig=fig, artists=artists, interval=10)
     plt.show()
-        
+    plot_variables_with_height(grid.temp_profile,grid.pres_profile,grid.y_profile)
+    #ani.save('rainfall')
             
-        
-       
-        
-    
-        
-        
-    
-
-
-
 if __name__ == "__main__":
     main()
 

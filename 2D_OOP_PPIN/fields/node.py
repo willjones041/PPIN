@@ -4,13 +4,16 @@
 class Node:
     instances = []
 
-    def __init__(self, x, y, temp, qv, ro, ws):
+    def __init__(self, x, y, temp, qv, ro, ws,diffus,visc,Lv):
         self.x = x
         self.y = y
         self.temp = temp
         self.qv = qv
         self.ro = ro
         self.ws = ws
+        self.diffus = diffus
+        self.visc = visc
+        self.Lv = Lv
         Node.instances.append(self)
 
     def __repr__(self):

@@ -13,6 +13,7 @@ class Parcel:
 
     def clear_parcel(self):
         """Remove this Parcel instance from storage"""
+    
         Parcel.instances.remove(self)   
     
     @classmethod
@@ -24,16 +25,9 @@ class Parcel:
     def clear_all(cls):
         """Removes all stored Parcel instances"""
         cls.instances.clear()
-
-    @classmethod
-    def find_by_coordinates(cls, x, y):
-        """Find a Parcel with specific coordinates"""
-        return next((parcel for parcel in cls.instances if parcel.x == x and parcel.y == y), None)
     
 
-# Creating instances of Parcel
-num_parcels = 100
-import random
+
 
 
 

@@ -18,10 +18,11 @@ class Domain:
         """Creates parcels based on this domain"""
         for i in range(num_parcels):
             x = random.random()*self.x_extent + self.origin[0]
-            y = random.gauss(init_y_parcels, std_dev_y_parcels) 
+            y = random.gauss(y_extent,std_dev_y_parcels)
             qr = qr0
-            nr = nr0
+            nr = nrlower + (nrupper - nrlower)*random.random()
             id = i
             PrecipParcel(x=x,y=y,qr=qr,nr=nr,id=id)
 
+    
     

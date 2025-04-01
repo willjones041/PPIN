@@ -9,25 +9,48 @@ class Grid:
         self.nodes = [] # we store the nodes in the grid!
         self.num_x = num_x  # Number of nodes along x-axis
         self.num_y = num_y  # Number of nodes along y-axis
+        self.temp_profile = []
+        self.pres_profile = []
+        self.dens_profile = []
+        self.y_profile = []
+        self.ws_profile = []
+        self.diffus_profile = []
+        self.visc_profile = []
+        self.Lv_profile=[]
         self.generate_nodes()  # Automatically generate nodes on creation
 
     def generate_nodes(self):
         """Creates nodes inside the grid based on the specified resolution"""
         x_spacing = self.domain.x_extent / (self.num_x - 1) if self.num_x > 1 else 0
         y_spacing = self.domain.y_extent / (self.num_y - 1) if self.num_y > 1 else 0
-
+    #   defining the temperature profile from the top down
         for i in range(self.num_x):
             for j in range(self.num_y):
                 x = self.domain.origin[0] + i * x_spacing
                 y = self.domain.origin[1] + j * y_spacing
-                temp = theta0 - (lapse_rate * y)
-                p = p0*(temp/theta0)**(g/(lapse_rate*Rd))
+                
+                temp = temp_top + (lapse_rate * y)
+                p = p_top*(temp/temp_top)**(g/(lapse_rate*Rd))
                 ws = 3.8/(p*math.e**(-17.2693882*(temp-273.15)/(temp-35.86))-6.109)
                 qv = RHenv*ws
                 ro = p/(Rd*temp)
-                
-                Node(x, y, temp, qv, ro, ws)
-  
+                #using smithsonian meteorological tables
+                diffus = ((temp/T_standard)**(1.81))*(P_standard/p)*(diffus_standard)
+                # using Sutherlands law
+                dyn_visc = (dyn_visc_standard*(temp/T_standard)**(3/2))*((T_standard/suth_const)/(temp+suth_const))
+                visc = dyn_visc/ro
+                #using watsons equation
+                Lv = Lv_standard*((T_critical-temp)/(T_critical-T_boil))
+                self.nodes.append(Node(x, y, temp, qv, ro, ws,diffus,visc,Lv))
+                if i == 0:
+                    self.temp_profile.append(temp)
+                    self.pres_profile.append(p)
+                    self.dens_profile.append(ro)
+                    self.y_profile.append(y)
+                    self.ws_profile.append(ws)
+                    self.diffus_profile.append(diffus)
+                    self.visc_profile.append(visc)
+                    self.Lv_profile.append(Lv)
     
     def grid2par(self, x, y):
         """Interpolates the values of the grid to the parcel position."""
@@ -35,14 +58,17 @@ class Grid:
         nodes = Node.get_all_instances()
         closest_nodes = []
         for node in nodes:
-            if abs(x -node.x) <= gridbox_x and abs(y-node.y) <= gridbox_y:
+            if abs(x - node.x) <= gridbox_x and abs(y - node.y) <= gridbox_y:
                 closest_nodes.append(node)
-        
+            elif x == node.x and y == node.y:
+                closest_nodes.append(node)
         # Sort the closest nodes based on their distance to the parcel
         closest_nodes.sort(key=lambda node: (node.x, node.y))
         
-        # Extract the temperature, qv, ro, and ws values from the closest nodes
-        
+
+        if len(closest_nodes) < 3:
+            raise ValueError(f"Not enough closest nodes found for coordinates ({x}, {y}). Found: {closest_nodes}")
+
         BL = closest_nodes[0]
         TL = closest_nodes[1]
         BR = closest_nodes[2]
@@ -51,8 +77,7 @@ class Grid:
         x2 = BR.x
         y1 = BL.y
         y2 = TL.y
-        # print(f'BL = {BL}, BR = {BR}, TL = {TL}, TR = {TR}')
-        # print(f'x1 = {x1}, x2 = {x2}, y1 = {y1}, y2 = {y2}')
+       
         temp = ((((x2-x)*(y2-y))/((x2-x1)*(y2-y1)))*BL.temp 
             + (((x-x1)*(y2-y))/((x2-x1)*(y2-y1)))*BR.temp 
             + (((x2-x)*(y-y1))/((x2-x1)*(y2-y1)))*TL.temp 
@@ -68,13 +93,25 @@ class Grid:
         ws = ((((x2-x)*(y2-y))/((x2-x1)*(y2-y1)))*BL.ws 
             + (((x-x1)*(y2-y))/((x2-x1)*(y2-y1)))*BR.ws 
             + (((x2-x)*(y-y1))/((x2-x1)*(y2-y1)))*TL.ws 
-            + (((x-x1)*(y-y1))/((x2-x1)*(y2-y1)))*TR.ws)    
+            + (((x-x1)*(y-y1))/((x2-x1)*(y2-y1)))*TR.ws)
+        diffus = ((((x2-x)*(y2-y))/((x2-x1)*(y2-y1)))*BL.diffus 
+            + (((x-x1)*(y2-y))/((x2-x1)*(y2-y1)))*BR.diffus
+            + (((x2-x)*(y-y1))/((x2-x1)*(y2-y1)))*TL.diffus
+            + (((x-x1)*(y-y1))/((x2-x1)*(y2-y1)))*TR.diffus)
+        visc =  ((((x2-x)*(y2-y))/((x2-x1)*(y2-y1)))*BL.visc 
+            + (((x-x1)*(y2-y))/((x2-x1)*(y2-y1)))*BR.visc
+            + (((x2-x)*(y-y1))/((x2-x1)*(y2-y1)))*TL.visc
+            + (((x-x1)*(y-y1))/((x2-x1)*(y2-y1)))*TR.visc)
+        Lv = ((((x2-x)*(y2-y))/((x2-x1)*(y2-y1)))*BL.Lv 
+            + (((x-x1)*(y2-y))/((x2-x1)*(y2-y1)))*BR.Lv
+            + (((x2-x)*(y-y1))/((x2-x1)*(y2-y1)))*TL.Lv
+            + (((x-x1)*(y-y1))/((x2-x1)*(y2-y1)))*TR.Lv)
 
 
 
 
-        # Return the interpolated temperature
-        return temp, qv, ro, ws
+        # Return the interpolated thermodynamic variables
+        return temp, qv, ro, ws,diffus,visc,Lv
         
     
     
