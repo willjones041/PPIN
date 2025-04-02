@@ -2,21 +2,14 @@
 from fields.node import Node
 import numpy as np
 from constants import *
-import math
+import math 
 class Grid:
     def __init__(self,domain, num_x, num_y):
         self.domain = domain #Tying the grid to the domain
         self.nodes = [] # we store the nodes in the grid!
         self.num_x = num_x  # Number of nodes along x-axis
         self.num_y = num_y  # Number of nodes along y-axis
-        self.temp_profile = []
-        self.pres_profile = []
-        self.dens_profile = []
-        self.y_profile = []
-        self.ws_profile = []
-        self.diffus_profile = []
-        self.visc_profile = []
-        self.Lv_profile=[]
+        
         self.generate_nodes()  # Automatically generate nodes on creation
 
     def generate_nodes(self):
@@ -29,28 +22,11 @@ class Grid:
                 x = self.domain.origin[0] + i * x_spacing
                 y = self.domain.origin[1] + j * y_spacing
                 
-                temp = temp_top + (lapse_rate * y)
-                p = p_top*(temp/temp_top)**(g/(lapse_rate*Rd))
-                ws = 3.8/(p*math.e**(-17.2693882*(temp-273.15)/(temp-35.86))-6.109)
-                qv = RHenv*ws
-                ro = p/(Rd*temp)
-                #using smithsonian meteorological tables
-                diffus = ((temp/T_standard)**(1.81))*(P_standard/p)*(diffus_standard)
-                # using Sutherlands law
-                dyn_visc = (dyn_visc_standard*(temp/T_standard)**(3/2))*((T_standard/suth_const)/(temp+suth_const))
-                visc = dyn_visc/ro
-                #using watsons equation
-                Lv = Lv_standard*((T_critical-temp)/(T_critical-T_boil))
-                self.nodes.append(Node(x, y, temp, qv, ro, ws,diffus,visc,Lv))
-                if i == 0:
-                    self.temp_profile.append(temp)
-                    self.pres_profile.append(p)
-                    self.dens_profile.append(ro)
-                    self.y_profile.append(y)
-                    self.ws_profile.append(ws)
-                    self.diffus_profile.append(diffus)
-                    self.visc_profile.append(visc)
-                    self.Lv_profile.append(Lv)
+                temp,ws,qv,ro,diffus,visc,Lv = self.domain.atmospheric_profile(x=x,y=y)
+
+                
+                self.nodes.append(Node(x=x, y=y, temp=temp, qv=qv, ro=ro, ws=ws,diffus=diffus,visc=visc,Lv=Lv))
+                
     
     def grid2par(self, x, y):
         """Interpolates the values of the grid to the parcel position."""

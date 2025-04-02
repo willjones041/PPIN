@@ -1,5 +1,5 @@
 from fields.domain import Domain
-from utils import set_pos_figure, fill_container,plot_variables_with_height
+from utils import set_pos_figure, fill_container,plot_nodes
 from parcels.parcels import Parcel
 from parcels.precip_parcels import PrecipParcel
 import matplotlib.pyplot as plt
@@ -15,6 +15,8 @@ def main():
 
     # Create grid with structured nodes
     grid = domain.create_grid(num_x, num_y)
+
+    plot_nodes()
    
    #create parcels
     domain.create_parcels()
@@ -22,10 +24,11 @@ def main():
     #Run Loop
     t=0
     rainfall = 0
-    
+    y_track = []
+    qr_track = []
 
     #prime figure for animation
-    fig, ax, artists= set_pos_figure()
+    #fig, ax, artists= set_pos_figure()
 
     while t < runtime and len(PrecipParcel.instances) > 0:
         
@@ -55,15 +58,22 @@ def main():
         t=t+delt
         print(t)
         #This is the function that updates the plot
-        container = fill_container(ax, PrecipParcel.instances)
-        artists.append(container)
-
+        #container = fill_container(ax, PrecipParcel.instances)
+        #artists.append(container)
+        y_track.append(parcel.y)
+        qr_track.append(parcel.qr)
     #This is the animation method
-    ani = animation.ArtistAnimation(fig=fig, artists=artists, interval=10)
-    plt.show()
-    plot_variables_with_height(grid.temp_profile,grid.pres_profile,grid.y_profile)
+    #ani = animation.ArtistAnimation(fig=fig, artists=artists, interval=10)
+    #plt.show()
+    
     #ani.save('rainfall')
-            
+    fig,ax = plt.subplots()
+    ax.plot(y_track, qr_track)
+    plt.xlabel('y')
+    plt.ylabel('qr')
+    plt.title('y_track vs qr_track')
+    plt.show()
+
 if __name__ == "__main__":
     main()
 

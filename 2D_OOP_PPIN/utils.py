@@ -6,18 +6,20 @@ from fields.domain import Domain
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from fields.node import Node
 
 def display_nodes(nodes):
     """Prints the generated nodes in a readable format."""
     for node in nodes:
         print(node)
 
-def plot_nodes(nodes):
+def plot_nodes():
     """Visualizes the nodes in a scatter plot with node.temp and node.ro on twin x axes."""
+    nodes = Node.get_all_instances()
     x_values = [node.y for node in nodes]
     temp_values = [node.temp for node in nodes]
     ro_values = [node.ro for node in nodes]
-    
+    print(ro_values)
 
     fig, ax1 = plt.subplots()
     ax1.scatter(x_values, temp_values, marker="x", color="blue")
@@ -82,17 +84,6 @@ def set_pos_figure():
     artists = []
     return fig, ax, artists
 
-    
-def plot_variables_with_height(x1_values,x2_values, height):
-    fig, ax1 = plt.subplots()
-    ax1.scatter(height, x1_values, marker="x", color="blue")
-    ax1.set_xlabel("Depth m")
-    ax1.set_ylabel("First Variable")
-    ax1.set_title("Variables Visualization")
-    ax1.grid(True)
-    ax2 = ax1.twinx()
-    ax2.plot(height, x2_values, color="red")
-    ax2.set_ylabel("Second variable")
-   
-    plt.show()
-    
+
+        
+

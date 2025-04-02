@@ -1,25 +1,24 @@
 import numpy as np
-
+import math
 # User input
-x_extent = 4000#float(input("Enter X extent of domain: "))
-y_extent = 4000#float(input("Enter Y extent of domain: "))
+x_extent = 10000#float(input("Enter X extent of domain: "))
+y_extent = 10000#float(input("Enter Y extent of domain: "))
 origin_x = 0#float(input("Enter X coordinate of origin: "))
 origin_y = 0#float(input("Enter Y coordinate of origin: "))
-num_x = 32#int(input("Enter number of nodes along X: "))
-num_y = 32#int(input("Enter number of nodes along Y: "))
+num_x = 100#int(input("Enter number of nodes along X: "))
+num_y = 100#int(input("Enter number of nodes along Y: "))
 gridbox_x = x_extent/(num_x-1)
 gridbox_y = y_extent/(num_y-1)
-
-num_parcels = 100#int(input("Enter parcel number: "))
+num_parcels = 1#int(input("Enter parcel number: "))
 
 #use these for a range of drop size dsitributions 
 nrlower = 1e3
 nrupper =(3/5)*10**5
 #use nr0 for fixed DSD in each parcel i.e fixed diameter
-nr0 = 5e5##float(input("Enter initial number concentration:"))
+nr0 = 1e5##float(input("Enter initial number concentration:"))
 
 #mass mixing ratio
-qr0 = 0.001#float(input("Enter initial mass mixing ratio:"))
+#qr0 = 0.001#float(input("Enter initial mass mixing ratio:"))
 
 #Abel and Shipway rain constants
 a1 = 4854
@@ -56,8 +55,8 @@ cp = 1005.7
 #gas constant for water vapour
 Rv = 461.52
 ro0 = 1.2256
-inhomog = True
-
+inhomog = False
+isothermal = True
 
 #time constants
 runtime = 10000
@@ -71,14 +70,14 @@ std_dev_y_parcels = 0
 #isotropic
 
 ##
-temp_top = 273.15
+T0 = 280
 lapse_rate = 0.009
-p_top = 600e2
+P0 = 100000
 Rd = 287
 g = 9.81
-RHenv = 0.7
+RHenv = 0.8
 
-##I went down a rappit hole on the dependence of these with temperature and density 
+##I went down a rappid hole on the dependence of these with temperature and density 
 ##Gave these a temperature and density dependence, could just use constants for shallow cases
 
 ##Got these from smithsoinian meteorological tables
@@ -95,3 +94,8 @@ dyn_visc_standard = 1.718e-5
 Lv_standard = 2.257*10**6
 T_critical = 647.1
 T_boil = 373.15
+
+D = 0.00005
+rostart = ro0*math.e**(-(g*init_y_parcels)/(Rd*T0))
+
+qr0 = (ro_r*nr0*(D**3))/rostart
