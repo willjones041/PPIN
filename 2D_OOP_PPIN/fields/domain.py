@@ -40,6 +40,6 @@ class Domain:
                     visc = dyn_visc/ro
                     #using watsons equation
                     Lv = Lv_standard*((T_critical-temp)/(T_critical-T_boil))
-                    #print(f'pressure = {p},ro={ro}, (x,y)=({x},{y})')
+                   
         return temp,ws,qv,ro,diffus,visc,Lv
     

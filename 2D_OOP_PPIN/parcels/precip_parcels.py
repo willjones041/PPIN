@@ -114,11 +114,13 @@ class PrecipParcel(Parcel):
         #Calculate the average droplet diameter
         D = self.diameter(ro)
         
+            
 
         #Calculate the velocity of the parcel
         y_dot = -self.term_func(ro,D)
+        
         if self.id ==0:
-            print(f'term velocity = {y_dot}')
+            print(f'term velocity = {y_dot} D = {D}')
         x_dot = 0
     
         #Evaporation step 
@@ -130,3 +132,4 @@ class PrecipParcel(Parcel):
         #this just prints the attributes of a given parcel
         if self.id ==0:
             print(self.stats())
+        

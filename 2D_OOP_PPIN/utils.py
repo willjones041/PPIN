@@ -19,7 +19,7 @@ def plot_nodes():
     x_values = [node.y for node in nodes]
     temp_values = [node.temp for node in nodes]
     ro_values = [node.ro for node in nodes]
-    print(ro_values)
+    
 
     fig, ax1 = plt.subplots()
     ax1.scatter(x_values, temp_values, marker="x", color="blue")

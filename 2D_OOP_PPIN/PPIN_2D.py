@@ -53,10 +53,13 @@ def main():
             parcel.x_teleport()
 
             #this is the function that moves the parcels and updates attributes
+            ##I inserted a fix that removes parcel once they reach the critical diameter for the  terminla velocity function
             parcel.move(grid=grid,t=t,delt=delt)
+            
         #Timer
         t=t+delt
         print(t)
+        
         #This is the function that updates the plot
         #container = fill_container(ax, PrecipParcel.instances)
         #artists.append(container)

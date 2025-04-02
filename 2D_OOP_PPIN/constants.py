@@ -23,10 +23,10 @@ nr0 = 1e5##float(input("Enter initial number concentration:"))
 #Abel and Shipway rain constants
 a1 = 4854
 b1 = 1
-a2 =-446
+a2 =446
 b2 = 0.782
 g1 = 195
-g2 = -4085.35
+g2 = 4085.35
 f = 0.5
 
 
@@ -95,7 +95,7 @@ Lv_standard = 2.257*10**6
 T_critical = 647.1
 T_boil = 373.15
 
-D = 0.00005
+D = 0.00001
 rostart = ro0*math.e**(-(g*init_y_parcels)/(Rd*T0))
 
 qr0 = (ro_r*nr0*(D**3))/rostart
