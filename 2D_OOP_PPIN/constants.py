@@ -1,34 +1,52 @@
 import numpy as np
 import math
-# User input
-x_extent = 10000#float(input("Enter X extent of domain: "))
-y_extent = 10000#float(input("Enter Y extent of domain: "))
-origin_x = 0#float(input("Enter X coordinate of origin: "))
-origin_y = 0#float(input("Enter Y coordinate of origin: "))
-num_x = 100#int(input("Enter number of nodes along X: "))
-num_y = 100#int(input("Enter number of nodes along Y: "))
+#time constants
+runtime = 100
+delt = 0.01
+
+# Number of parcels to be seeded in the domain
+num_parcels = 1 
+
+# Height at which to seed the parcels
+init_y_parcels = 1000
+
+# Number concentration in each parcel
+nr0 = 100000
+
+# Mean droplet diameter in each parcel 
+D = 0.0001
+
+#Bounds of the domain
+x_extent = 10000
+y_extent = 10000
+
+#Coordinates of the origin (don't change)
+origin_x = 0
+origin_y = 0
+
+#Resolution of the grid (number of nodes)
+num_y = 100
+num_x = 100
+
+#Grid spacing in x and y
 gridbox_x = x_extent/(num_x-1)
 gridbox_y = y_extent/(num_y-1)
-num_parcels = 1#int(input("Enter parcel number: "))
 
-#use these for a range of drop size dsitributions 
-nrlower = 1e3
-nrupper =(3/5)*10**5
-#use nr0 for fixed DSD in each parcel i.e fixed diameter
-nr0 = 1e5##float(input("Enter initial number concentration:"))
+#Boolean switches for 1. Abel and shipway rain (changes terminal velocity equation) 
+# # 2. Inhomogeneous evaporation 
+# # # 3. Isothermal atmosphere (if False then lapse rate is used)
+abel_shipway = False
+inhomog = True
+isothermal = True
 
-#mass mixing ratio
-#qr0 = 0.001#float(input("Enter initial mass mixing ratio:"))
-
-#Abel and Shipway rain constants
-a1 = 4854
-b1 = 1
+#Terminal velocity constants from Abel and Shipway (2012)
+a1 = 362
+b1 = 0.65
 a2 =446
 b2 = 0.782
-g1 = 195
+g1 = 0
 g2 = 4085.35
 f = 0.5
-
 
 #Runge kutta coefficients
 ca =  np.array([0,-567301805773/1357537059087,-2404267990393/2016746695238,\
@@ -40,41 +58,39 @@ cc = np.array([0,1432997174477/9575080441755,2526269341429/6820363962896,\
                    2006345519317/3224310063776,2802321613138/2924317926251])
 
 
-
-#Size distribution constants
+#Size distribution constants (shape parameter mu)
 shape = 2.5
 
-#physical constants
+## physical constants
+#density of liquid water
 ro_r = 1000
-
 
 
 #Thermal conductivity of air
 Ka = 0.02623
+
+#Specific heat capacity at constant pressure
 cp = 1005.7
+
 #gas constant for water vapour
 Rv = 461.52
+
+#density of air at sea levl
 ro0 = 1.2256
-inhomog = False
-isothermal = True
-
-#time constants
-runtime = 10000
-delt = 1
-
-#parcel initialisations
-init_y_parcels = 1000
-std_dev_y_parcels = 0
+#Gas constant for dry air (can use as no saturation)
+Rd = 287
+g = 9.81
 
 #environmental constants
 #isotropic
 
-##
+#Surface temperature
 T0 = 280
+# environmental lapse rate
 lapse_rate = 0.009
+#surface pressure
 P0 = 100000
-Rd = 287
-g = 9.81
+# Enviornmental relative humidity
 RHenv = 0.8
 
 ##I went down a rappid hole on the dependence of these with temperature and density 
@@ -95,7 +111,8 @@ Lv_standard = 2.257*10**6
 T_critical = 647.1
 T_boil = 373.15
 
-D = 0.00001
+## Here we use the values given for the starting point thermodynamic variables and the size distribution to calculate
+## the mixing ratio of rainwater in the starting parcels
 rostart = ro0*math.e**(-(g*init_y_parcels)/(Rd*T0))
 
 qr0 = (ro_r*nr0*(D**3))/rostart

@@ -4,9 +4,9 @@ import numpy as np
 from constants import *
 import math 
 class Grid:
+
     def __init__(self,domain, num_x, num_y):
         self.domain = domain #Tying the grid to the domain
-        self.nodes = [] # we store the nodes in the grid!
         self.num_x = num_x  # Number of nodes along x-axis
         self.num_y = num_y  # Number of nodes along y-axis
         
@@ -16,7 +16,7 @@ class Grid:
         """Creates nodes inside the grid based on the specified resolution"""
         x_spacing = self.domain.x_extent / (self.num_x - 1) if self.num_x > 1 else 0
         y_spacing = self.domain.y_extent / (self.num_y - 1) if self.num_y > 1 else 0
-    #   defining the temperature profile from the top down
+    #   defining the temperature profile 
         for i in range(self.num_x):
             for j in range(self.num_y):
                 x = self.domain.origin[0] + i * x_spacing
@@ -24,8 +24,8 @@ class Grid:
                 
                 temp,ws,qv,ro,diffus,visc,Lv = self.domain.atmospheric_profile(x=x,y=y)
 
-                
-                self.nodes.append(Node(x=x, y=y, temp=temp, qv=qv, ro=ro, ws=ws,diffus=diffus,visc=visc,Lv=Lv))
+                ## Creates the nodes 
+                Node(x=x, y=y, temp=temp, qv=qv, ro=ro, ws=ws,diffus=diffus,visc=visc,Lv=Lv)
                 
     
     def grid2par(self, x, y):
@@ -42,9 +42,9 @@ class Grid:
         closest_nodes.sort(key=lambda node: (node.x, node.y))
         
 
-        if len(closest_nodes) < 3:
+        if len(closest_nodes) < 4:
             raise ValueError(f"Not enough closest nodes found for coordinates ({x}, {y}). Found: {closest_nodes}")
-
+        #Defining the corners of the grid box which contains the parcel
         BL = closest_nodes[0]
         TL = closest_nodes[1]
         BR = closest_nodes[2]
@@ -53,7 +53,7 @@ class Grid:
         x2 = BR.x
         y1 = BL.y
         y2 = TL.y
-       
+       ## Using bilinear interpolation to get the values of the thermodynamic variables
         temp = ((((x2-x)*(y2-y))/((x2-x1)*(y2-y1)))*BL.temp 
             + (((x-x1)*(y2-y))/((x2-x1)*(y2-y1)))*BR.temp 
             + (((x2-x)*(y-y1))/((x2-x1)*(y2-y1)))*TL.temp 

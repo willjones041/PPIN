@@ -1,6 +1,5 @@
 from fields.domain import Domain
 from utils import set_pos_figure, fill_container,plot_nodes
-from parcels.parcels import Parcel
 from parcels.precip_parcels import PrecipParcel
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
@@ -16,6 +15,7 @@ def main():
     # Create grid with structured nodes
     grid = domain.create_grid(num_x, num_y)
 
+    #This shows the atmospheric profile chosen
     plot_nodes()
    
    #create parcels
@@ -24,11 +24,9 @@ def main():
     #Run Loop
     t=0
     rainfall = 0
-    y_track = []
-    qr_track = []
-
+    
     #prime figure for animation
-    #fig, ax, artists= set_pos_figure()
+    fig, ax, artists= set_pos_figure()
 
     while t < runtime and len(PrecipParcel.instances) > 0:
         
@@ -44,7 +42,7 @@ def main():
                 continue
                 
             #These 3 lines clear a parcel if its number concentration is less than 1
-            elif parcel.qr < 0:
+            elif parcel.nr < 1:
                 parcel.clear_parcel()
                 print(f'Poof! Raindrop evaporated at height {parcel.y}m ')
                 continue
@@ -53,7 +51,7 @@ def main():
             parcel.x_teleport()
 
             #this is the function that moves the parcels and updates attributes
-            ##I inserted a fix that removes parcel once they reach the critical diameter for the  terminla velocity function
+            
             parcel.move(grid=grid,t=t,delt=delt)
             
         #Timer
@@ -61,21 +59,14 @@ def main():
         print(t)
         
         #This is the function that updates the plot
-        #container = fill_container(ax, PrecipParcel.instances)
-        #artists.append(container)
-        y_track.append(parcel.y)
-        qr_track.append(parcel.qr)
+        container = fill_container(ax, PrecipParcel.instances)
+        artists.append(container)
+        
     #This is the animation method
-    #ani = animation.ArtistAnimation(fig=fig, artists=artists, interval=10)
-    #plt.show()
+
+    ani = animation.ArtistAnimation(fig=fig, artists=artists, interval=10)
+    plt.show() 
     
-    #ani.save('rainfall')
-    fig,ax = plt.subplots()
-    ax.plot(y_track, qr_track)
-    plt.xlabel('y')
-    plt.ylabel('qr')
-    plt.title('y_track vs qr_track')
-    plt.show()
 
 if __name__ == "__main__":
     main()
